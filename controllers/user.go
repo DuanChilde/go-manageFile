@@ -3,8 +3,12 @@ package controllers
 import (
 	"encoding/json"
 	"manageFile/models"
+	"net/http"
+	"time"
 
 	"github.com/astaxie/beego"
+	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/dgrijalva/jwt-go/request"
 )
 
 // Operations about Users
@@ -46,6 +50,9 @@ func (u *UserController) GetAll() {
 // @Failure 403 :uid is empty
 // @router /:uid [get]
 func (u *UserController) Get() {
+	//rs := ValidateTokenMiddleware(u.Ctx.ResponseWriter, u.Ctx.Request)
+	//beego.Debug(rs)
+	//beego.Debug(u.Ctx.Request.Header.Get("token"))
 	uid, _ := u.GetInt64(":uid")
 	if uid != 0 {
 		user, err := models.GetUserById(uid)
@@ -108,10 +115,17 @@ func (u *UserController) Login() {
 	password := u.GetString("password")
 	//isRemenbered := u.GetString("isRemenbered")
 	if userId, err := models.Login(username, password); userId != 0 {
+		token := jwt.New(jwt.SigningMethodHS256)
+		claims := make(jwt.MapClaims)
+		claims["exp"] = time.Now().Add(time.Hour * time.Duration(1)).Unix()
+		claims["iat"] = time.Now().Unix()
+		token.Claims = claims
+		tokenString, _ := token.SignedString([]byte("duanwei"))
+
 		userInfo := map[string]interface{}{
 			"userId":   userId,
 			"username": username,
-			"token":    "aaa",
+			"token":    tokenString,
 		}
 		u.Data["json"] = res.Success("login success", userInfo)
 	} else {
@@ -127,4 +141,21 @@ func (u *UserController) Login() {
 func (u *UserController) Logout() {
 	u.Data["json"] = res.Success("logout success", make(map[string]interface{}))
 	u.ServeJSON()
+}
+
+func ValidateTokenMiddleware(w http.ResponseWriter, r *http.Request) bool {
+	token, err := request.ParseFromRequest(r, request.AuthorizationHeaderExtractor,
+		func(token *jwt.Token) (interface{}, error) {
+			return []byte("duanwei"), nil
+		})
+	if err == nil {
+		if token.Valid {
+			return true
+		} else {
+			return false
+		}
+	} else {
+		return false
+	}
+	return true
 }

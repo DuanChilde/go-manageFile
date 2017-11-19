@@ -19,8 +19,7 @@ func init() {
 	orm.RegisterDriver("mysql", orm.DRMySQL)
 	conn := dbuser + ":" + dbpassword + "@/" + dbname + "?charset=utf8"
 	orm.RegisterDataBase("default", "mysql", conn)
-	orm.RegisterModel(new(User))
-	orm.RegisterModel(new(Group))
+	orm.RegisterModel(new(User), new(GroupAuth), new(StoreHouse))
 	db = orm.NewOrm()   //注册新的orm
 	db.Using("dafault") //使用数据库，默认default
 }

@@ -7,7 +7,7 @@ import (
 
 func init() {
 
-	beego.GlobalControllerRouter["manageFile/controllers:ObjectController"] = append(beego.GlobalControllerRouter["manageFile/controllers:ObjectController"],
+	beego.GlobalControllerRouter["manageFile/controllers:StoreHouseController"] = append(beego.GlobalControllerRouter["manageFile/controllers:StoreHouseController"],
 		beego.ControllerComments{
 			Method: "Post",
 			Router: `/`,
@@ -15,7 +15,7 @@ func init() {
 			MethodParams: param.Make(),
 			Params: nil})
 
-	beego.GlobalControllerRouter["manageFile/controllers:ObjectController"] = append(beego.GlobalControllerRouter["manageFile/controllers:ObjectController"],
+	beego.GlobalControllerRouter["manageFile/controllers:StoreHouseController"] = append(beego.GlobalControllerRouter["manageFile/controllers:StoreHouseController"],
 		beego.ControllerComments{
 			Method: "GetAll",
 			Router: `/`,
@@ -23,27 +23,27 @@ func init() {
 			MethodParams: param.Make(),
 			Params: nil})
 
-	beego.GlobalControllerRouter["manageFile/controllers:ObjectController"] = append(beego.GlobalControllerRouter["manageFile/controllers:ObjectController"],
-		beego.ControllerComments{
-			Method: "Get",
-			Router: `/:objectId`,
-			AllowHTTPMethods: []string{"get"},
-			MethodParams: param.Make(),
-			Params: nil})
-
-	beego.GlobalControllerRouter["manageFile/controllers:ObjectController"] = append(beego.GlobalControllerRouter["manageFile/controllers:ObjectController"],
+	beego.GlobalControllerRouter["manageFile/controllers:StoreHouseController"] = append(beego.GlobalControllerRouter["manageFile/controllers:StoreHouseController"],
 		beego.ControllerComments{
 			Method: "Put",
-			Router: `/:objectId`,
+			Router: `/:storeId`,
 			AllowHTTPMethods: []string{"put"},
 			MethodParams: param.Make(),
 			Params: nil})
 
-	beego.GlobalControllerRouter["manageFile/controllers:ObjectController"] = append(beego.GlobalControllerRouter["manageFile/controllers:ObjectController"],
+	beego.GlobalControllerRouter["manageFile/controllers:StoreHouseController"] = append(beego.GlobalControllerRouter["manageFile/controllers:StoreHouseController"],
 		beego.ControllerComments{
 			Method: "Delete",
-			Router: `/:objectId`,
+			Router: `/:storeId`,
 			AllowHTTPMethods: []string{"delete"},
+			MethodParams: param.Make(),
+			Params: nil})
+
+	beego.GlobalControllerRouter["manageFile/controllers:StoreHouseController"] = append(beego.GlobalControllerRouter["manageFile/controllers:StoreHouseController"],
+		beego.ControllerComments{
+			Method: "Get",
+			Router: `/:uid`,
+			AllowHTTPMethods: []string{"get"},
 			MethodParams: param.Make(),
 			Params: nil})
 

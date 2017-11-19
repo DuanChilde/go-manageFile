@@ -43,8 +43,10 @@ func GetUserById(uid int64) (u *User, err error) {
 	return user, nil
 }
 
-func GetAllUsers() map[string]*User {
-	return nil
+func GetAllUsers() []*User {
+	var userList []*User
+	db.Raw("select * from user").QueryRows(&userList)
+	return userList
 }
 
 func UpdateUser(uid int64, u *User) (a *User, err error) {
@@ -66,13 +68,11 @@ func UpdateUser(uid int64, u *User) (a *User, err error) {
 func Login(username, password string) (uid int64, err error) {
 	user := new(User)
 	user.Username = username
-	//user.Password = password
-	beego.Debug(db.Read(user))
-	if err := db.Read(user); err != nil {
+	user.Password = password
+	beego.Debug(user)
+	if err := db.Read(user, "username", "password"); err != nil {
 		return 0, errors.New("User not exists")
 	}
-
-	//生成token
 	return user.Id, nil
 }
 
