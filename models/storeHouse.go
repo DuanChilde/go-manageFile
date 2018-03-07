@@ -19,7 +19,7 @@ type StoreHouse struct {
 	Mtime       int64  `json:"mtime"`
 }
 
-func Add(s StoreHouse) int64 {
+func AddStore(s StoreHouse) int64 {
 
 	s.Ctime = time.Now().Unix()
 	s.Mtime = time.Now().Unix()
@@ -32,7 +32,7 @@ func Add(s StoreHouse) int64 {
 	return sid
 }
 
-func GetById(id int64) (s *StoreHouse, err error) {
+func GetStoreById(id int64) (s *StoreHouse, err error) {
 	store := new(StoreHouse)
 	store.Id = id
 	if err := db.Read(store); err != nil {
@@ -41,9 +41,9 @@ func GetById(id int64) (s *StoreHouse, err error) {
 	return store, nil
 }
 
-func Update(id int64, s *StoreHouse) (a *StoreHouse, err error) {
+func UpdateStore(id int64, s *StoreHouse) (a *StoreHouse, err error) {
 	s.Id = id
-	store, err := GetById(id)
+	store, err := GetStoreById(id)
 	if err != nil {
 		return nil, errors.New("store not exists")
 	}
@@ -56,13 +56,13 @@ func Update(id int64, s *StoreHouse) (a *StoreHouse, err error) {
 	return s, nil
 }
 
-func GetAll() []*StoreHouse {
+func GetAllStore() []*StoreHouse {
 	var storeList []*StoreHouse
 	db.Raw("select * from StoreHouse").QueryRows(&storeList)
 	return storeList
 }
 
-func Delete(id int64) int64 {
+func DeleteStore(id int64) int64 {
 	record := new(StoreHouse)
 	record.Id = id
 	num, err := db.Delete(record)

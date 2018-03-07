@@ -21,7 +21,9 @@ type StoreHouseController struct {
 func (s *StoreHouseController) Post() {
 	var store models.StoreHouse
 	json.Unmarshal(s.Ctx.Input.RequestBody, &store)
-	storeId := models.Add(store)
+	storeId := models.AddStore(store)
+	//todo 上传文件
+	
 	s.Data["json"] = res.Success("", map[string]interface{}{"storeId": storeId})
 	s.ServeJSON()
 }
@@ -31,7 +33,7 @@ func (s *StoreHouseController) Post() {
 // @Success 200 {storeHouse} models.StoreHouse
 // @router / [get]
 func (s *StoreHouseController) GetAll() {
-	stores := models.GetAll()
+	stores := models.GetAllStore()
 	storeList := map[string]interface{}{
 		"storeList": stores,
 	}
@@ -48,7 +50,7 @@ func (s *StoreHouseController) GetAll() {
 func (s *StoreHouseController) Get() {
 	storeId, _ := s.GetInt64(":storeId")
 	if storeId != 0 {
-		store, err := models.GetById(storeId)
+		store, err := models.GetStoreById(storeId)
 		if err != nil {
 			s.Data["json"] = err.Error()
 		} else {
@@ -73,7 +75,7 @@ func (s *StoreHouseController) Put() {
 	if storeId != 0 {
 		var store models.StoreHouse
 		json.Unmarshal(s.Ctx.Input.RequestBody, &store)
-		_, err := models.Update(storeId, &store)
+		_, err := models.UpdateStore(storeId, &store)
 		if err != nil {
 			s.Data["json"] = res.Fail(err.Error())
 		} else {
@@ -91,7 +93,7 @@ func (s *StoreHouseController) Put() {
 // @router /:storeId [delete]
 func (s *StoreHouseController) Delete() {
 	storeId, _ := s.GetInt64(":storeId")
-	models.Delete(storeId)
+	models.DeleteStore(storeId)
 	s.Data["json"] = res.Success("delete success", make(map[string]interface{}))
 	s.ServeJSON()
 }
